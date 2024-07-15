@@ -10,15 +10,17 @@ import Cards from "@/components/cards";
 import Header from "@/components/homehead";
 
 export default function Home() {
-  const [passwords, setPasswords] = useState([]);
+  const [search, setSearch] = useState("");
+  let [passwords, setPasswords] = useState([]);
+  const data = localStorage.getItem("email");
   const getPass = async () => {
     await axios
-      .get("/api/pass/get-password")
+      .get(`/api/pass/get-password/${data}`)
       .then((response) => {
         setPasswords(response.data);
       })
       .catch((error) => {
-        toast.error(error.response.data.error);
+        toast.error(error?.response?.data?.error);
       });
   };
 
@@ -44,10 +46,18 @@ export default function Home() {
   useEffect(() => {
     getPass();
   }, []);
+  if (search) {
+    const result = passwords.filter(
+      (user: { _id: string; name: string; user: string; password: string }) =>
+        user.name === search,
+    );
+
+    passwords = result;
+  }
 
   return (
     <>
-      <Header getPass={getPass} />
+      <Header getPass={getPass} setSearch={setSearch} />
       <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1  gap-5">
         {passwords.map((password: pass) => (
           <Cards

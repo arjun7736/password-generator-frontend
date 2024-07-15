@@ -2,12 +2,22 @@
 import { Link } from "@nextui-org/link";
 import { button as buttonStyles } from "@nextui-org/theme";
 import { FcGoogle } from "react-icons/fc";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 import { title } from "@/components/primitives";
 import { GithubIcon } from "@/components/icons";
 
 export default function Home() {
+  const { data: session } = useSession();
+
+  const googleLogin = async () => {
+    await signIn();
+  };
+
+  if (session?.user?.email !== undefined) {
+    localStorage.setItem("email", `${session?.user?.email}`);
+  }
+
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
       <div className="inline-block max-w-lg text-center justify-center">
@@ -24,7 +34,7 @@ export default function Home() {
             radius: "full",
             variant: "bordered",
           })}
-          onClick={() => signIn()}
+          onClick={googleLogin}
         >
           <FcGoogle size={20} />
           Google

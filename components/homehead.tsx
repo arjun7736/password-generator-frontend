@@ -9,7 +9,13 @@ import PasswordModal from "./passwordmodal";
 
 import { generateRandomPassword } from "@/utils/createPass";
 
-export default function Header({ getPass }: { getPass: () => void }) {
+export default function Header({
+  getPass,
+  setSearch,
+}: {
+  getPass: () => void;
+  setSearch: (value: string) => void;
+}) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [newPassword, setPassword] = useState("");
 
@@ -36,6 +42,7 @@ export default function Header({ getPass }: { getPass: () => void }) {
           className="w-2/4"
           endContent={<FiSearch size={18} />}
           placeholder="Search...."
+          onChange={(e) => setSearch(e.target.value)}
         />
         <Button variant="bordered" onClick={savePassword}>
           Save a Password

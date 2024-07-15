@@ -12,6 +12,7 @@ import {
 import { Snippet } from "@nextui-org/snippet";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
 
 import axios from "../utils/axiosConfig";
 
@@ -29,6 +30,7 @@ export default function PasswordModal({
     }
     onOpenChange(false);
   };
+  const { data: session } = useSession();
 
   const save = async () => {
     const passwordToSave = newPassword ? newPassword : password;
@@ -37,12 +39,13 @@ export default function PasswordModal({
       .post("/api/pass/add-password", {
         name: name,
         password: passwordToSave,
+        user: session?.user?.email,
       })
       .then((res) => {
         toast.success(res.data.message);
       })
       .catch((error) => {
-        toast.error(error.response.data.error);
+        toast.error(error?.response?.data?.error);
       });
     if (setPassword) {
       setPassword("");
