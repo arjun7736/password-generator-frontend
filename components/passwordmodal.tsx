@@ -39,10 +39,10 @@ export default function PasswordModal({
         password: passwordToSave,
       })
       .then((res) => {
-        toast(res.data.message);
+        toast.success(res.data.message);
       })
       .catch((error) => {
-        toast(error.response.data.error);
+        toast.error(error.response.data.error);
       });
     if (setPassword) {
       setPassword("");

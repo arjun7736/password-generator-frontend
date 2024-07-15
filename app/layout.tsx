@@ -61,7 +61,7 @@ export default function RootLayout({
             newestOnTop={false}
             position="top-right"
             rtl={false}
-            theme="dark"
+            theme="light"
             transition={Bounce}
           />
         </Providers>
