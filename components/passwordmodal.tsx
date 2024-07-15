@@ -10,41 +10,80 @@ import {
   ModalHeader,
 } from "@nextui-org/modal";
 import { Snippet } from "@nextui-org/snippet";
+import { useState } from "react";
+import { toast } from "react-toastify";
+
+import axios from "../utils/axiosConfig";
 
 export default function PasswordModal({
   isOpen,
   onOpenChange,
-}: {
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-}) {
+  newPassword,
+  setPassword,
+}: PasswordModalProps) {
+  const [password, setPAsswordInput] = useState("");
+  const [name, setNameInput] = useState("");
+  const cancel = () => {
+    if (setPassword) {
+      setPassword("");
+    }
+    onOpenChange(false);
+  };
+
+  const save = async () => {
+    const passwordToSave = newPassword ? newPassword : password;
+
+    await axios
+      .post("/api/pass/add-password", {
+        name: name,
+        password: passwordToSave,
+      })
+      .then((res) => {
+        toast(res.data.message);
+      })
+      .catch((error) => {
+        toast(error.response.data.error);
+      });
+    if (setPassword) {
+      setPassword("");
+    }
+    onOpenChange(false);
+  };
+
   return (
     <>
       <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}>
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Log in</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">
+                Save Password
+              </ModalHeader>
               <ModalBody>
                 <Input
                   label="name"
                   placeholder="Enter Name For Password"
                   variant="bordered"
+                  onChange={(e) => setNameInput(e.target.value)}
                 />
-                <Input
-                  label="Password"
-                  placeholder="Enter your password"
-                  type="password"
-                  variant="bordered"
-                />
-                <Snippet hideSymbol={true}> your password Will be here</Snippet>
+                {newPassword ? (
+                  <Snippet hideSymbol={true}>{newPassword}</Snippet>
+                ) : (
+                  <Input
+                    label="Password"
+                    placeholder="Enter your password"
+                    type="password"
+                    variant="bordered"
+                    onChange={(e) => setPAsswordInput(e.target.value)}
+                  />
+                )}
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="flat" onPress={onClose}>
-                  Close
+                <Button color="danger" variant="flat" onPress={cancel}>
+                  Cancel
                 </Button>
-                <Button color="primary" onPress={onClose}>
-                  Sign in
+                <Button color="primary" onPress={save}>
+                  Save
                 </Button>
               </ModalFooter>
             </>
@@ -53,4 +92,11 @@ export default function PasswordModal({
       </Modal>
     </>
   );
+}
+
+interface PasswordModalProps {
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
+  newPassword?: string;
+  setPassword?: (password: string) => void;
 }
