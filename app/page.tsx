@@ -7,6 +7,8 @@ import { signIn, useSession } from "next-auth/react";
 import { title } from "@/components/primitives";
 import { GithubIcon } from "@/components/icons";
 
+import { useEffect } from "react";
+
 export default function Home() {
   const { data: session } = useSession();
 
@@ -14,9 +16,16 @@ export default function Home() {
     await signIn();
   };
 
-  if (session?.user?.email !== undefined) {
-    localStorage.setItem("email", `${session?.user?.email}`);
-  }
+  // if (session?.user?.email !== undefined) {
+  //   localStorage.setItem("email", `${session?.user?.email}`);
+  // }
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (session?.user?.email !== undefined) {
+        localStorage.setItem("email", `${session?.user?.email}`);
+      }
+    }
+  }, []);
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
