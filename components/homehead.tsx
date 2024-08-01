@@ -33,7 +33,7 @@ export default function Header({
 
   useEffect(() => {
     getPass();
-  }, [newPasswordclick, savePassword]);
+  }, [onOpenChange]);
 
   return (
     <>

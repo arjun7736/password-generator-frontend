@@ -59,7 +59,7 @@ export default function Home() {
   if (search) {
     const result = passwords.filter(
       (user: { _id: string; name: string; user: string; password: string }) =>
-        user.name === search,
+        user.name.toLowerCase().includes(search.toLowerCase()),
     );
 
     passwords = result;
