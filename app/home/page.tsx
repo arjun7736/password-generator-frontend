@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import axios from "../../utils/axiosConfig";
 
@@ -10,9 +12,17 @@ import Cards from "@/components/cards";
 import Header from "@/components/homehead";
 
 export default function Home() {
+  const router = useRouter();
   const [search, setSearch] = useState("");
   let [passwords, setPasswords] = useState([]);
-  const data = localStorage.getItem("email");
+  const { data: session } = useSession();
+  let data: string | null | undefined = null;
+
+  if (session) {
+    data = session?.user?.email;
+  } else {
+    router.push("/");
+  }
   const getPass = async () => {
     await axios
       .get(`/api/pass/get-password/${data}`)

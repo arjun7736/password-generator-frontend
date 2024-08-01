@@ -13,28 +13,21 @@ import { Link } from "@nextui-org/link";
 import NextLink from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 import { siteConfig } from "@/config/site";
 import { Logo } from "@/components/icons";
 
 export const Navbar = () => {
-  const router = useRouter();
   const { data: session } = useSession();
 
-  useEffect(() => {
-    const data = localStorage.getItem("email");
-
-    if (data) {
-      router.push("/home");
-    } else {
-      router.push("/");
-    }
-  }, []);
-  const logOut = () => {
-    signOut();
-    localStorage.clear();
+  const router = useRouter();
+  const logOut = async () => {
+    await signOut();
   };
+
+  if (!session) {
+    router.push("/");
+  }
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky">

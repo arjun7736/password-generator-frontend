@@ -3,29 +3,21 @@ import { Link } from "@nextui-org/link";
 import { button as buttonStyles } from "@nextui-org/theme";
 import { FcGoogle } from "react-icons/fc";
 import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import { title } from "@/components/primitives";
 import { GithubIcon } from "@/components/icons";
 
-import { useEffect } from "react";
-
 export default function Home() {
   const { data: session } = useSession();
-
+  const router = useRouter();
   const googleLogin = async () => {
     await signIn();
   };
 
-  // if (session?.user?.email !== undefined) {
-  //   localStorage.setItem("email", `${session?.user?.email}`);
-  // }
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      if (session?.user?.email !== undefined) {
-        localStorage.setItem("email", `${session?.user?.email}`);
-      }
-    }
-  }, []);
+  if (session) {
+    router.push("/home");
+  }
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
