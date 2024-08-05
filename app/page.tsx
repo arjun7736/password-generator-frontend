@@ -12,7 +12,11 @@ export default function Home() {
   const { data: session } = useSession();
   const router = useRouter();
   const googleLogin = async () => {
-    await signIn();
+    await signIn("google");
+  };
+
+  const gitLogin = async () => {
+    await signIn("github");
   };
 
   if (session) {
@@ -43,6 +47,7 @@ export default function Home() {
         <Link
           isExternal
           className={buttonStyles({ variant: "bordered", radius: "full" })}
+          onClick={gitLogin}
         >
           <GithubIcon size={20} />
           GitHub
