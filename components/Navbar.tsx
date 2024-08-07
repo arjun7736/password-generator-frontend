@@ -13,6 +13,7 @@ import { Link } from "@nextui-org/link";
 import NextLink from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 import { siteConfig } from "@/config/site";
 import { Logo } from "@/components/icons";
@@ -23,6 +24,7 @@ export const Navbar = () => {
   const router = useRouter();
   const logOut = async () => {
     await signOut();
+    toast("Loggedout");
   };
 
   if (!session) {
