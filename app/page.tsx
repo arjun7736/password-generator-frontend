@@ -32,7 +32,7 @@ export default function Home() {
         <h1 className={title()}>Stronger</h1>
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex gap-3 cursor-pointer">
         <Link
           isExternal
           className={buttonStyles({
